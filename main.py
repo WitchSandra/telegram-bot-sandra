@@ -1,11 +1,8 @@
 # main.py
 import os
 import openai
-from dotenv import load_dotenv  # ✅ Добавлено для загрузки .env файла
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
-
-load_dotenv()  # ✅ Загрузка переменных окружения из .env файла
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
