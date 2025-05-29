@@ -279,6 +279,7 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
     await update.message.reply_text(reply)
 
 if __name__ == '__main__':
+    print("BOT_TOKEN from env:", repr(BOT_TOKEN))
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
