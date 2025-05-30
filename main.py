@@ -18,13 +18,13 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
 
 # Обработка вручную /contact
     if command == "contact":
-        contact_message = r"""
-    📨 Напиши Ведьме Сандре:
-    🧿 [WhatsApp: +370 689 27160](https://wa.me/37068927160)
-    🧿 [Личный Telegram](https://t.me/WitchSandra96)\
-    🧿 [Сайт: world\\-psychology\\.com](https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/)
-    ✴️ Выбирай то пространство, где тебе безопаснее\. Я отвечаю лично\. И когда ты будешь готов — я услышу\."""  
-        await update.message.reply_text(contact_message, parse_mode="MarkdownV2", disable_web_page_preview=True)
+        contact_message = """📨 <b>Напиши Ведьме Сандре:</b><br>
+    🧿 <a href="https://wa.me/37068927160">WhatsApp: +370 689 27160</a><br>
+    🧿 <a href="https://t.me/WitchSandra96">Личный Telegram</a><br>
+    🧿 <a href="https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/">Сайт: world-psychology.com</a><br><br>
+    ✴️ Выбирай то пространство, где тебе безопаснее. Я отвечаю лично. И когда ты будешь готов — я услышу.
+    """
+    await update.message.reply_text(contact_message, parse_mode="HTML", disable_web_page_preview=True)
         return
      
     reply = prompts.get(command, "🧙‍♀️ Это — голос Ведьмы Сандры и Эла'Йа.\n"
