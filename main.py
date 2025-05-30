@@ -199,13 +199,14 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
             return
         try:
             completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": user_text}]
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": user_text}]
             )
             gpt_reply = completion.choices[0].message.content
         await update.message.reply_text(gpt_reply)
-    except Exception as e:
-        await update.message.reply_text("🔄 Сейчас не могу получить ответ от Сандры и ЭлаЙа. Попробуй ещё раз чуть позже.")
+    
+        except Exception as e:
+            await update.message.reply_text("🔄 Сейчас не могу получить ответ от Сандры и ЭлаЙа. Попробуй ещё раз чуть позже.")
 
     
     # Обращение к ChatGPT от лица ЭлаЙа
