@@ -9,15 +9,14 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 # Обработчик команд по ключам
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await generic_response_command(update, context)  
-async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
     if not update.message or not update.message.text:
         return
+        
     if command is None:
         command = update.message.text.strip("/")
 
-    # Отдельная обработка команды /contact
+      # Обработка вручную /contact
     if command == "contact":
         contact_message = r"""
             📨 Напиши Ведьме Сандре:
