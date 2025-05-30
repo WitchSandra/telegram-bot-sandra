@@ -193,6 +193,7 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
         "цена, стоит, стоимость": "price", "любовь, вместе": "love", "помогите, помощь, помочь": "help", "конец, закрыли, ухожу": "end"
     }
 
+    # Обращение к ChatGPT от лица ЭлаЙа
     for keyword, command in keyword_mapping.items():
         if keyword in user_text:
             await generic_response_command(update, context, command)
@@ -203,29 +204,15 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
                 messages=[{"role": "user", "content": user_text}]
             )
             gpt_reply = completion.choices[0].message.content
-        await update.message.reply_text(gpt_reply)
-    
+            await update.message.reply_text(gpt_reply)
         except Exception as e:
-            await update.message.reply_text("🔄 Сейчас не могу получить ответ от Сандры и ЭлаЙа. Попробуй ещё раз чуть позже.")
-
+            await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.")
     
-    # Обращение к ChatGPT от лица ЭлаЙа
-    await update.message.reply_chat_action(action="typing")
-    try:
-        gpt_response = await ask_elaya(user_text)
-        await update.message.reply_text(gpt_response)
-    try:
-    completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        user_text = update.message.text
-prompt = f"Сандра и ЭлаЙа, магические наставницы. Ответьте на этот вопрос с мудростью:\n\n{user_text}"
-        messages=[{"role": "user", "content": prompt}]
-    )
-    gpt_reply = completion.choices[0].message.content
-    await update.message.reply_text(gpt_reply)
-except Exception as e:
-        await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.")
-
+        await update.message.reply_chat_action(action="typing")
+        try:
+            gpt_response = await ask_elaya(user_text)
+            await update.message.reply_text(gpt_response)
+    
 # Обращение к OpenAI
 async def ask_elaya(user_input):
     response = openai.ChatCompletion.create(
