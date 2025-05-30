@@ -28,8 +28,7 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
         
         await update.message.reply_text(contact_message, parse_mode="MarkdownV2", disable_web_page_preview=True)
         return
-    
-    command = update.message.text.strip("/")   
+     
     reply = prompts.get(command, "🧙‍♀️ Это — голос Ведьмы Сандры и Эла'Йа.\n"
         "Здесь ты можешь задать вопрос, получить поддержку, магический ритуал или просто поговорить с душой.\n"
         "<a href='https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/contact/'>🌐 Подробнее: https://world-psychology.com/")
