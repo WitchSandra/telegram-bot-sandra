@@ -253,6 +253,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await chatgpt_response(update, context)
 
 # Запуск приложения
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await generic_response_command(update, context, command="start")
 if __name__ == '__main__':
     print("BOT_TOKEN:", repr(BOT_TOKEN))
     print("OPENAI_API_KEY:", repr(openai.api_key))
