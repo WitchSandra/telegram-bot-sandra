@@ -193,26 +193,32 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
         "цена, стоит, стоимость": "price", "любовь, вместе": "love", "помогите, помощь, помочь": "help", "конец, закрыли, ухожу": "end"
     }
 
-    # Обращение к ChatGPT от лица ЭлаЙа
+# Обращение к ChatGPT от лица ЭлаЙа
     for keyword, command in keyword_mapping.items():
         if keyword in user_text:
             await generic_response_command(update, context, command)
-            return
+            return# Обращение к ChatGPT от лица ЭлаЙа
         try:
+            # Первый ответ напрямую от GPT
             completion = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": user_text}]
             )
             gpt_reply = completion.choices[0].message.content
             await update.message.reply_text(gpt_reply)
-        except Exception as e:
-            await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.")
-    
-        await update.message.reply_chat_action(action="typing")
-        try:
+        
+            # Эффект печатающего бота
+            await update.message.reply_chat_action(action="typing")
+        
+            # Ответ от ЭлаЙа
             gpt_response = await ask_elaya(user_text)
             await update.message.reply_text(gpt_response)
-    
+        
+        except Exception as e:
+            await update.message.reply_text(
+        "⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже."
+        ) 
+          
 # Обращение к OpenAI
 async def ask_elaya(user_input):
     response = openai.ChatCompletion.create(
