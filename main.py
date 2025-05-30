@@ -199,21 +199,19 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     for keyword, command in keyword_mapping.items():
         if keyword in user_text:
             await generic_response_command(update, context, command)
-            return# Обращение к ChatGPT от лица Сандры и ЭлаЙа
-        try:
-            # Первый ответ напрямую от GPT
-        import asyncio
+            return
 
+ # Если ключевое слово не найдено — обычный запрос к ChatGPT
         await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
-
+        
         try:
             completion = await asyncio.wait_for(
                 openai.ChatCompletion.acreate(  # асинхронная версия!
                     model="gpt-3.5-turbo",
                     messages=[{"role": "user", "content": user_text}]
-        ),
-        timeout=20  # секунд
-    )
+                 ),
+                timeout=20  # секунд
+            )
             gpt_reply = completion.choices[0].message.content
             await update.message.reply_text(gpt_reply)
         except asyncio.TimeoutError:
