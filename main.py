@@ -197,7 +197,7 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
         if keyword in user_text:
             await generic_response_command(update, context, command)
             return
- try:
+        try:
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": user_text}]
