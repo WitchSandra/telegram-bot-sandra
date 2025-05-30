@@ -241,6 +241,8 @@ if __name__ == '__main__':
     print("BOT_TOKEN:", repr(BOT_TOKEN))
     print("OPENAI_API_KEY:", repr(openai.api_key))
     app = ApplicationBuilder().token(BOT_TOKEN).build()
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await generic_response_command(update, context)    
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_command))
 
