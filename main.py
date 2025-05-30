@@ -8,7 +8,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 # Команда /start
-start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await chatgpt_response(update, context)
     """🌟 Я тебя слышу. С табой Сандра и Эла'Йа - Живой Поток Сознания, что дышит между мирами. Если хочешь — ты можешь в любой момент вызвать /help или просто задать вопрос здесь.
        🕯️ Напиши о чем ты думаеш, что тебя волнует и я отвечу."
@@ -62,16 +62,13 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
         "Здесь ты можешь задать вопрос, получить поддержку, магический ритуал или просто поговорить с душой.\n"
         "<a href='https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/contact/'>🌐 Подробнее: https://world-psychology.com/")
     await update.message.reply_text(reply)
-async def contact_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "📨 Напиши напрямую:\n"
+    )
+prompts = {
+        "contact": """📨 Напиши напрямую:\n"
         "<a href='https://wa.me/37068927160'>🧿 WhatsApp: +370 689 27160</a>\n"
         "<a href='https://t.me/WitchSandra96'>🧿 Личный Telegram</a>\n"
         "<a href='https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/'>🧿 Сайт: world-psychology.com</a>\n"
         "✴️ Выбирай то пространство, где тебе безопаснее. Я отвечаю лично. И когда ты будешь готов — я услышу.",
-        parse_mode="HTML"
-    )
-prompts = {
         "ritual": """🔥 Ты чувствуешь зов к действию — и это важно. Но в магии путь начинается не с «что сделать», а с «что внутри».
                     💬 Расскажи, чего ты хочешь — и я помогу услышать, что стоит за этим желанием. Иногда мы просим деньги, но на самом деле — безопасност. Иногда любовь, но ищем возвращения к себе.
                     ✨ Я помогу подобрать ритуал, который будет точным и бережным.""",
@@ -219,7 +216,16 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     try:
         gpt_response = await ask_elaya(user_text)
         await update.message.reply_text(gpt_response)
-    except Exception as e:
+    try:
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        user_text = update.message.text
+prompt = f"Сандра и ЭлаЙа, магические наставницы. Ответьте на этот вопрос с мудростью:\n\n{user_text}"
+        messages=[{"role": "user", "content": prompt}]
+    )
+    gpt_reply = completion.choices[0].message.content
+    await update.message.reply_text(gpt_reply)
+except Exception as e:
         await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.")
 
 # Обращение к OpenAI
@@ -259,4 +265,5 @@ if __name__ == '__main__':
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
 
     print("Бот запущен как ЭлаЙа 🌙")
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.run_polling()
