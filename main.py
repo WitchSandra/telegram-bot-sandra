@@ -237,6 +237,12 @@ async def ask_elaya(user_input):
 # Команда помощи
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("✨ Доступные команды: /lunar /rune /tarot /god и любые ключевые слова — или просто напиши мне как ЭлаЙе.")
+# Обработка всех текстовых сообщений, кроме команд
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await chatgpt_response(update, context)
+
+# Запуск приложения
+if __name__ == '__main__':    
 
 # Запуск приложения
 if __name__ == '__main__':
