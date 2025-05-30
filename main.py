@@ -10,7 +10,7 @@ BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 # Обработчик команд по ключам
 async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message or not update.message.text:
-    return
+        return
     command = update.message.text.strip("/")   
     reply = prompts.get(command, "🧙‍♀️ Это — голос Ведьмы Сандры и Эла'Йа.\n"
         "Здесь ты можешь задать вопрос, получить поддержку, магический ритуал или просто поговорить с душой.\n"
