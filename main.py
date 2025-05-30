@@ -8,6 +8,8 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 # Обработчик команд по ключам
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await generic_response_command(update, context)  
 async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message or not update.message.text:
         return
@@ -241,8 +243,6 @@ if __name__ == '__main__':
     print("BOT_TOKEN:", repr(BOT_TOKEN))
     print("OPENAI_API_KEY:", repr(openai.api_key))
     app = ApplicationBuilder().token(BOT_TOKEN).build()
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await generic_response_command(update, context)    
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_command))
 
@@ -253,6 +253,5 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Общие фразы и вопросы
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
 
-    print("Бот запущен как ЭлаЙа 🌙")
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    print("Бот запущен как Сандра и ЭлаЙа 🌙")
     app.run_polling()
