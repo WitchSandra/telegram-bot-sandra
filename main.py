@@ -164,6 +164,13 @@ prompts = {
                     🕯️ Когда снова почувствуешь зов — я здесь. /start или /contact — и мы продолжим. С любовью, Ведьма Сандра."""
     }
 
+async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
+    if not update.message or not update.message.text:
+        return
+
+    if command is None:
+        command = update.message.text.strip("/")
+
     if command in prompts:
         await update.message.reply_text(prompts[command])
     else:
