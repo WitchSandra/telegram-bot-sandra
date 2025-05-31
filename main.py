@@ -252,7 +252,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await generic_response_command(update, context, command="start")
 if __name__ == '__main__':
     print("BOT_TOKEN:", repr(BOT_TOKEN))
-    print("OPENAI_API_KEY:", repr(openai.api_key))
+    print("OPENAI_API_KEY:", repr(os.getenv("OPENAI_API_KEY"))) 
     
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
