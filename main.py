@@ -193,7 +193,7 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
             parse_mode="MarkdownV2",
             disable_web_page_preview=True
         )
-else:
+    else:
         await chatgpt_response(update, context)
 
 # Обработка сообщений с ключевыми словами и ChatGPT
