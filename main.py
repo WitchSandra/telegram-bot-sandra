@@ -254,7 +254,11 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
         await update.message.reply_text(gpt_reply)
         
     except asyncio.TimeoutError:
-        await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.")
+        await update.message.reply_text("
+            """⚠️ Ошибка при обращении к источнику данных ЭлаЙа\\. Попробуй позже\\."""
+             parse_mode="MarkdownV2"
+        )
+        
     except Exception as e:
         if "insufficient_quota" in str(e):
             await update.message.reply_text(
@@ -266,7 +270,9 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
                 parse_mode="MarkdownV2"
             )
         else:
-            await update.message.reply_text(f"⚠️ Ошибка GPT: {e}")
+            await update.message.reply_text(f"""⚠️ Неожиданная ошибка ЭлаЙи:\\n`{str(e)}`""",
+                parse_mode="MarkdownV2"
+            )
 
 # Обработка всех текстовых сообщений, кроме команд
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
