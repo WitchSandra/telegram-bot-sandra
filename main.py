@@ -22,9 +22,8 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
     🧿 <a href="https://wa.me/37068927160">WhatsApp: +370 689 27160</a><br>
     🧿 <a href="https://t.me/WitchSandra96">Личный Telegram</a><br>
     🧿 <a href="https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/">Сайт: world-psychology.com</a><br><br>
-    ✴️ Выбирай то пространство, где тебе безопаснее. Я отвечаю лично. И когда ты будешь готов — я услышу.
-    """
-    await update.message.reply_text(contact_message, parse_mode="HTML", disable_web_page_preview=True)
+    ✴️ Выбирай то пространство, где тебе безопаснее. Я отвечаю лично. И когда ты будешь готов — я услышу."""
+        await update.message.reply_text(contact_message, parse_mode="HTML", disable_web_page_preview=True)
         return
      
     reply = prompts.get(command, "🧙‍♀️ Это — голос Ведьмы Сандры и Эла'Йа.\n"
@@ -215,7 +214,7 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
             return
 
  # Если ключевое слово не найдено — обычный запрос к ChatGPT
-        await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
+    await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
         
         try:
             completion = await asyncio.wait_for(
@@ -228,8 +227,7 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
             gpt_reply = completion.choices[0].message.content
             await update.message.reply_text(gpt_reply)
         except asyncio.TimeoutError:
-            await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже."
-        ) 
+            await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.") 
           
 # Обращение к OpenAI
 async def ask_elaya(user_input):
