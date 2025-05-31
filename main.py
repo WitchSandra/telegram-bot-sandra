@@ -179,7 +179,7 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
         command = update.message.text.strip("/")
     if command == "contact":
         contact_message = r"""📨 Напиши Ведьме Сандре:
-    🧿 [WhatsApp: +370 689 27160](https://wa.me/37068927160)
+    🧿 [WhatsApp: \+370 689 27160](https://wa.me/37068927160)
     🧿 [Личный Telegram](https://t.me/WitchSandra96)
     🧿 [Сайт: world\-psychology\.com](https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/)
     ✴️ Выбирай то пространство, где тебе безопаснее\. Я отвечаю лично\. И когда ты будешь готов — я услышу\."""
