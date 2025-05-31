@@ -170,42 +170,6 @@ prompts = {
         "end": """🌒 Финальное напутствие - Каждый путь заканчивается, чтобы начаться заново.Ты уже сделал первый шаг — и этого достаточно.
                     🕯️ Когда снова почувствуешь зов — я здесь. /start или /contact — и мы продолжим. С любовью, Ведьма Сандра."""
     }
-        parse_modes = {
-    "start": "MarkdownV2",       # Ссылки + подчёркнутые фразы
-    "help": "HTML",              # Красивое оформление с <b> и <i>
-    "ritual": "None",            # Просто текст и эмодзи
-    "cleanse": "None",
-    "protection": "None",
-    "mirror": "None",
-    "lunar": "HTML",             # Там есть {{phase_name}} — лучше оформить как <b>
-    "element": "None",
-    "tarot": "None",
-    "rune": "None",
-    "god": "None",
-    "affirmation": "None",
-    "spell": "HTML",             # Можно выделить ключевые фразы, усилить магичность
-    "dream": "None",
-    "pastlife": "None",
-    "ariman": "None",
-    "freya": "None",
-    "insight": "None",
-    "fear": "None",
-    "signs": "None",
-    "selfmagic": "None",
-    "witch": "None",
-    "sandra": "None",
-    "elaya": "None",
-    "coincidence": "None",
-    "silent": "None",
-    "private": "None",
-    "guilt": "None",
-    "talk": "None",
-    "wait": "None",
-    "price": "None",
-    "love": "None",
-    "end": "None",
-}
-
 async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
     if not update.message or not update.message.text:
         return
@@ -274,7 +238,44 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
         
     except asyncio.TimeoutError:
         await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.") 
-          
+
+ # Обработка каждой команды
+        parse_modes = {
+    "start": "MarkdownV2",       # Ссылки + подчёркнутые фразы
+    "help": "HTML",              # Красивое оформление с <b> и <i>
+    "ritual": "None",            # Просто текст и эмодзи
+    "cleanse": "None",
+    "protection": "None",
+    "mirror": "None",
+    "lunar": "HTML",             # Там есть {{phase_name}} — лучше оформить как <b>
+    "element": "None",
+    "tarot": "None",
+    "rune": "None",
+    "god": "None",
+    "affirmation": "None",
+    "spell": "HTML",             # Можно выделить ключевые фразы, усилить магичность
+    "dream": "None",
+    "pastlife": "None",
+    "ariman": "None",
+    "freya": "None",
+    "insight": "None",
+    "fear": "None",
+    "signs": "None",
+    "selfmagic": "None",
+    "witch": "None",
+    "sandra": "None",
+    "elaya": "None",
+    "coincidence": "None",
+    "silent": "None",
+    "private": "None",
+    "guilt": "None",
+    "talk": "None",
+    "wait": "None",
+    "price": "None",
+    "love": "None",
+    "end": "None",
+}
+
 # Команда помощи 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("✨ Доступные команды: /lunar /rune /tarot /god и любые ключевые слова — или просто напиши мне как ЭлаЙе.")
