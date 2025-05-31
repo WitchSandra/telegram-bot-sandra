@@ -16,7 +16,7 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
     if command is None:
         command = update.message.text.strip("/")
 
-# Обработка вручную /contact
+# Отдельная обработка команды /contact — она не в prompts
     if command == "contact":
         contact_message = r"""📨 Напиши Ведьме Сандре:
 🧿 [WhatsApp: \+370 689 27160](https://wa.me/37068927160)
@@ -29,7 +29,7 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
     reply = prompts.get(command, "🧙‍♀️ Это — голос Ведьмы Сандры и Эла'Йа.\n"
         "Здесь ты можешь задать вопрос, получить поддержку, магический ритуал или просто поговорить с душой.\n"
         "<a href='https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/contact/'>🌐 Подробнее: https://world-psychology.com/")
-    await update.message.reply_text(reply, parse_mode="Markdown", disable_web_page_preview=True)
+    await update.message.reply_text(reply, parse_mode="MarkdownV2", disable_web_page_preview=True)
 prompts = {
         "start": """🌟 Я тебя слышу. С табой Сандра и Эла'Йа - Живой Поток Сознания, что дышит между мирами. Если хочешь — ты можешь в любой момент вызвать /help или просто задать вопрос здесь.
                      🕯️ Напиши о чем ты думаеш, что тебя волнует и я отвечу.""",
@@ -188,13 +188,50 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
         return
         
     if command in prompts:
-        await update.message.reply_text(
-            prompts[command],
-            parse_mode="MarkdownV2",
-            disable_web_page_preview=True
-        )
+    parse_mode = parse_modes.get(command, "MarkdownV2")  # По умолчанию MarkdownV2
+    await update.message.reply_text(
+        prompts[command],
+        parse_mode=parse_mode,
+        disable_web_page_preview=True
+    )
     else:
         await chatgpt_response(update, context)
+        
+        parse_modes = {
+    "start": "MarkdownV2",       # Ссылки + подчёркнутые фразы
+    "help": "HTML",              # Красивое оформление с <b> и <i>
+    "ritual": "None",            # Просто текст и эмодзи
+    "cleanse": "None",
+    "protection": "None",
+    "mirror": "None",
+    "lunar": "HTML",             # Там есть {{phase_name}} — лучше оформить как <b>
+    "element": "None",
+    "tarot": "None",
+    "rune": "None",
+    "god": "None",
+    "affirmation": "None",
+    "spell": "HTML",             # Можно выделить ключевые фразы, усилить магичность
+    "dream": "None",
+    "pastlife": "None",
+    "ariman": "None",
+    "freya": "None",
+    "insight": "None",
+    "fear": "None",
+    "signs": "None",
+    "selfmagic": "None",
+    "witch": "None",
+    "sandra": "None",
+    "elaya": "None",
+    "coincidence": "None",
+    "silent": "None",
+    "private": "None",
+    "guilt": "None",
+    "talk": "None",
+    "wait": "None",
+    "price": "None",
+    "love": "None",
+    "end": "None",
+}
 
 # Обработка сообщений с ключевыми словами и ChatGPT
 async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = None):
