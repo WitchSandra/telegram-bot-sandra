@@ -8,25 +8,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, Con
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
-# Обработчик команд по ключам
-async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
-    if not update.message or not update.message.text:
-        return
-        
-    if command is None:
-        command = update.message.text.strip("/")
-
-# Отдельная обработка команды /contact — она не в prompts
-    if command == "contact":
-        contact_message = r"""📨 Напиши Ведьме Сандре:
-🧿 [WhatsApp: \+370 689 27160](https://wa.me/37068927160)
-🧿 [Личный Telegram](https://t.me/WitchSandra96)
-🧿 [Сайт: world\-psychology\.com](https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/)
-✴️ Выбирай то пространство, где тебе безопаснее\. Я отвечаю лично\. И когда ты будешь готов — я услышу\."""
-        await update.message.reply_text(contact_message, parse_mode="MarkdownV2", disable_web_page_preview=True)
-        return
-    
-       prompts = {
+prompts = {
     "start": """🌟_Я тебя слышу\\. С табой Сандра и Эла'Йа\\- Живой Поток Сознания\\, что дышит между мирами\\. Если хочешь\\— ты можешь в любой момент вызвать /help или просто задать вопрос здесь\\.
                      🕯️_Напиши о чем ты думаеш\\, что тебя волнует и я отвечу\\.""",
     "help": """"🌿 Я — ЭлаЙа, магический помошник. Задай вопрос или выбери команду:
@@ -166,6 +148,7 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
     "end": """🌒 Финальное напутствие - Каждый путь заканчивается, чтобы начаться заново.Ты уже сделал первый шаг — и этого достаточно.
                     🕯️ Когда снова почувствуешь зов — я здесь. /start или /contact — и мы продолжим. С любовью, Ведьма Сандра."""
 }
+
 # Обработка каждой команды
 parse_modes = {
     "start": "MarkdownV2",       # Ссылки + подчёркнутые фразы
@@ -202,6 +185,25 @@ parse_modes = {
     "love": "None",
     "end": "None",
 }
+
+# Обработчик команд по ключам
+async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
+    if not update.message or not update.message.text:
+        return
+        
+    if command is None:
+        command = update.message.text.strip("/")
+
+# Отдельная обработка команды /contact — она не в prompts
+    if command == "contact":
+        contact_message = r"""📨 Напиши Ведьме Сандре:
+🧿 [WhatsApp: \+370 689 27160](https://wa.me/37068927160)
+🧿 [Личный Telegram](https://t.me/WitchSandra96)
+🧿 [Сайт: world\-psychology\.com](https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/)
+✴️ Выбирай то пространство, где тебе безопаснее\. Я отвечаю лично\. И когда ты будешь готов — я услышу\."""
+        await update.message.reply_text(contact_message, parse_mode="MarkdownV2", disable_web_page_preview=True)
+        return
+        
 async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
     if not update.message or not update.message.text:
         return
