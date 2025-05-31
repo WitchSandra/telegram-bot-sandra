@@ -1,11 +1,11 @@
 import os
-import openai
+from openai import AsyncOpenAI
 import asyncio 
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 
 # Загружаем переменные среды
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 # Обработчик команд по ключам
