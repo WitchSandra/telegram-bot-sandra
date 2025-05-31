@@ -177,20 +177,22 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
 
     if command is None:
         command = update.message.text.strip("/")
+        
     if command == "contact":
         contact_message = r"""📨 Напиши Ведьме Сандре:
-    🧿 [WhatsApp: \+370 689 27160](https://wa.me/37068927160)
-    🧿 [Личный Telegram](https://t.me/WitchSandra96)
-    🧿 [Сайт: world\-psychology\.com](https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/)
-    ✴️ Выбирай то пространство, где тебе безопаснее\. Я отвечаю лично\. И когда ты будешь готов — я услышу\."""
+🧿 [WhatsApp: \+370 689 27160](https://wa.me/37068927160)
+🧿 [Личный Telegram](https://t.me/WitchSandra96)
+🧿 [Сайт: world\-psychology\.com](https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/)
+✴️ Выбирай то пространство, где тебе безопаснее\. Я отвечаю лично\. И когда ты будешь готов — я услышу\."""
         await update.message.reply_text(contact_message, parse_mode="MarkdownV2", disable_web_page_preview=True)
         return
-if command in prompts:
-    await update.message.reply_text(
-        prompts[command],
-        parse_mode="MarkdownV2",
-        disable_web_page_preview=True
-    )
+        
+    if command in prompts:
+        await update.message.reply_text(
+            prompts[command],
+            parse_mode="MarkdownV2",
+            disable_web_page_preview=True
+        )
 else:
         await chatgpt_response(update, context)
 
