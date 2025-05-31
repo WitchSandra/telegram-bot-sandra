@@ -270,7 +270,8 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
                 parse_mode="MarkdownV2"
             )
         else:
-            await update.message.reply_text(f"⚠️ Неожиданная ошибка ЭлаЙи:\\n`{str(e)}`",
+            await update.message.reply_text(
+                f"⚠️ Неожиданная ошибка ЭлаЙи:\\n`{str(e)}`",
                 parse_mode="MarkdownV2"
             )
 
