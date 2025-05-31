@@ -223,32 +223,21 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
         
     try:
-        completion = await asyncio.wait_for(
-            openai.ChatCompletion.acreate(  # асинхронная версия!
+        response = await asyncio.wait_for(
+            client.chat.completions.create(
                 model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": user_text}]
+                messages=[
+                    {"role": "system", "content": "Ты — голос Элайи..."},
+                    {"role": "user", "content": user_text},
+                ]
             ),
-            timeout=20  # секунд
+            timeout=20
         )
-        gpt_reply = completion.choices[0].message.content
+        gpt_reply = response.choices[0].message.content.strip()
         await update.message.reply_text(gpt_reply)
     except asyncio.TimeoutError:
         await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.") 
           
-# Обращение к OpenAI
-from openai import AsyncOpenAI
-
-client = AsyncOpenAI()
-
-response = await client.chat.completions.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "system", "content": "Ты — голос Элайи..."},
-        {"role": "user", "content": user_text},
-    ]
-)
-    return response.choices[0].message.content.strip()
-
 # Команда помощи 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("✨ Доступные команды: /lunar /rune /tarot /god и любые ключевые слова — или просто напиши мне как ЭлаЙе.")
