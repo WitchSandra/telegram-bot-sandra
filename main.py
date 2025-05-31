@@ -240,6 +240,8 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
         
     try:
+        print("📡 Запрос Сандре и ЭлаЙле отправлен:", user_text)
+        
         response = await asyncio.wait_for(
             client.chat.completions.create(
                 model="gpt-3.5-turbo",
