@@ -290,12 +290,6 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", generic_response_command))
 
-# Добавляем обработчики для всех команд
-    for cmd in prompts.keys():
-        app.add_handler(CommandHandler(cmd, generic_response_command))
-# Добавляем вручную команду /contact
-    app.add_handler(CommandHandler("contact", generic_response_command))
-    
 # Общие фразы и вопросы
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
 
