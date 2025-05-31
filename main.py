@@ -235,6 +235,7 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
         )
         gpt_reply = response.choices[0].message.content.strip()
         await update.message.reply_text(gpt_reply)
+        
     except asyncio.TimeoutError:
         await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.") 
           
