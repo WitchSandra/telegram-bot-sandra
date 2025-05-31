@@ -170,33 +170,6 @@ prompts = {
         "end": """🌒 Финальное напутствие - Каждый путь заканчивается, чтобы начаться заново.Ты уже сделал первый шаг — и этого достаточно.
                     🕯️ Когда снова почувствуешь зов — я здесь. /start или /contact — и мы продолжим. С любовью, Ведьма Сандра."""
     }
-
-async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
-    if not update.message or not update.message.text:
-        return
-
-    if command is None:
-        command = update.message.text.strip("/")
-        
-    if command == "contact":
-        contact_message = r"""📨 Напиши Ведьме Сандре:
-🧿 [WhatsApp: \+370 689 27160](https://wa.me/37068927160)
-🧿 [Личный Telegram](https://t.me/WitchSandra96)
-🧿 [Сайт: world\-psychology\.com](https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/)
-✴️ Выбирай то пространство, где тебе безопаснее\. Я отвечаю лично\. И когда ты будешь готов — я услышу\."""
-        await update.message.reply_text(contact_message, parse_mode="MarkdownV2", disable_web_page_preview=True)
-        return
-        
-    if command in prompts:
-    parse_mode = parse_modes.get(command, "MarkdownV2")  # По умолчанию MarkdownV2
-    await update.message.reply_text(
-        prompts[command],
-        parse_mode=parse_mode,
-        disable_web_page_preview=True
-    )
-    else:
-        await chatgpt_response(update, context)
-        
         parse_modes = {
     "start": "MarkdownV2",       # Ссылки + подчёркнутые фразы
     "help": "HTML",              # Красивое оформление с <b> и <i>
@@ -233,6 +206,32 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
     "end": "None",
 }
 
+async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
+    if not update.message or not update.message.text:
+        return
+
+    if command is None:
+        command = update.message.text.strip("/")
+        
+    if command == "contact":
+        contact_message = r"""📨 Напиши Ведьме Сандре:
+🧿 [WhatsApp: \+370 689 27160](https://wa.me/37068927160)
+🧿 [Личный Telegram](https://t.me/WitchSandra96)
+🧿 [Сайт: world\-psychology\.com](https://world-psychology.com/magiya-i-psihologiya-dlya-cheloveka/misticheskij-kabinet-vedmy-sandry/)
+✴️ Выбирай то пространство, где тебе безопаснее\. Я отвечаю лично\. И когда ты будешь готов — я услышу\."""
+        await update.message.reply_text(contact_message, parse_mode="MarkdownV2", disable_web_page_preview=True)
+        return
+        
+    if command in prompts:
+        parse_mode = parse_modes.get(command, "MarkdownV2")  # По умолчанию MarkdownV2
+        await update.message.reply_text(
+            prompts[command],
+            parse_mode=parse_mode,
+            disable_web_page_preview=True
+        )
+    else:
+        await chatgpt_response(update, context)
+        
 # Обработка сообщений с ключевыми словами и ChatGPT
 async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = None):
     user_text = update.message.text
