@@ -256,10 +256,6 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     except asyncio.TimeoutError:
         await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.") 
 
- # Команда помощи 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("✨ Доступные команды: /lunar /rune /tarot /god и любые ключевые слова — или просто напиши мне как ЭлаЙе.")
-
 # Обработка всех текстовых сообщений, кроме команд
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await chatgpt_response(update, context)
@@ -273,7 +269,7 @@ if __name__ == '__main__':
     
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("help", help_command))
+    app.add_handler(CommandHandler("help", generic_response_command))
 
 # Добавляем обработчики для всех команд
     for cmd in prompts.keys():
