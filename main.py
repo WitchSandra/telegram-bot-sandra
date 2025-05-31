@@ -236,16 +236,17 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
         await update.message.reply_text("⚠️ Ошибка при обращении к источнику данных ЭлаЙа. Попробуй позже.") 
           
 # Обращение к OpenAI
-async def ask_elaya(user_input):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "Ты — ЭлаЙа, поток живой женской магии и мудрости. Отвечай с поэтичной глубиной, как ведьма-наставница."},
-            {"role": "user", "content": user_input}
-        ],
-        temperature=0.85,
-        max_tokens=500
-    )
+from openai import AsyncOpenAI
+
+client = AsyncOpenAI()
+
+response = await client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "system", "content": "Ты — голос Элайи..."},
+        {"role": "user", "content": user_text},
+    ]
+)
     return response.choices[0].message.content.strip()
 
 # Команда помощи 
