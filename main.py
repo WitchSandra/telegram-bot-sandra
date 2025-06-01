@@ -307,7 +307,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await generic_response_command(update, context, command="start")
 if __name__ == '__main__':
-    syncio.run(reset_telegram_session())
+    asyncio.run(reset_telegram_session())
     
     print("BOT_TOKEN:", repr(BOT_TOKEN))
     print("OPENAI_API_KEY:", repr(os.getenv("OPENAI_API_KEY"))) 
