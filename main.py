@@ -306,18 +306,22 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Запуск приложения
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await generic_response_command(update, context, command="start")
-if __name__ == '__main__':
-    asyncio.run(reset_telegram_session())
-    
+
+# 🔁 Основной запуск бота через асинхронную функцию main()
+async def main():
+    await reset_telegram_session()
+
     print("BOT_TOKEN:", repr(BOT_TOKEN))
-    print("OPENAI_API_KEY:", repr(os.getenv("OPENAI_API_KEY"))) 
-    
+    print("OPENAI_API_KEY:", repr(os.getenv("OPENAI_API_KEY")))
+
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", generic_response_command))
-
-# Общие фразы и вопросы
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
 
     print("Бот запущен как Сандра и ЭлаЙа 🌙")
-    app.run_polling()
+    await app.run_polling()
+
+# 🚀 Запуск main() через asyncio
+if __name__ == '__main__':
+    asyncio.run(main())
