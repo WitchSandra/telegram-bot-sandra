@@ -287,6 +287,7 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
                 f"⚠️ Неожиданная ошибка ЭлаЙи:\\n`{str(e)}`",
                 parse_mode="MarkdownV2"
             )
+        print("⚠️ Поток ЭлаЙи прерван\\. Возможно, слишком много вопросов сразу\\.", str(e))
 
 # Обработка всех текстовых сообщений, кроме команд
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
