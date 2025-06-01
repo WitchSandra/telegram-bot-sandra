@@ -318,6 +318,7 @@ async def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", generic_response_command))
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
+    app.add_handler(MessageHandler(filters.COMMAND, generic_response_command))
 
     print("Бот запущен как Сандра и ЭлаЙа 🌙")
     await app.run_polling(allowed_updates=[])
