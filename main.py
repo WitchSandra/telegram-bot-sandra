@@ -4,14 +4,24 @@ import asyncio
 import requests  # Добавь если ещё не добавлен
 
 # 🔧 Сброс Telegram-сессии при запуске
-def reset_telegram_session():
+import aiohttp
+
+async def reset_telegram_session():
     token = os.getenv("TELEGRAM_BOT_TOKEN")
-    url = f"https://api.telegram.org/bot{token}/deleteWebhook"
-    try:
-        response = requests.get(url)
-        print("🔧 Telegram session reset:", response.json())
-    except Exception as e:
-        print("⚠️ Ошибка сброса Telegram-сессии:", e)
+    base_url = f"https://api.telegram.org/bot{token}"
+
+    async with aiohttp.ClientSession() as session:
+        try:
+            print("🔧 Запрос getUpdates (очистка polling)...")
+            async with session.get(f"{base_url}/getUpdates") as r1:
+                print("📩 getUpdates:", await r1.json())
+
+            print("🧹 Удаление Webhook...")
+            async with session.get(f"{base_url}/deleteWebhook") as r2:
+                print("🧼 deleteWebhook:", await r2.json())
+
+        except Exception as e:
+            print("⚠️ Ошибка сброса Telegram-сессии:", e)
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 
@@ -297,7 +307,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await generic_response_command(update, context, command="start")
 if __name__ == '__main__':
-    reset_telegram_session()
+    syncio.run(reset_telegram_session())
     
     print("BOT_TOKEN:", repr(BOT_TOKEN))
     print("OPENAI_API_KEY:", repr(os.getenv("OPENAI_API_KEY"))) 
