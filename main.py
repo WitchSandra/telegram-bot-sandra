@@ -261,6 +261,7 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
 
  # Если ключевое слово не найдено — обычный запрос к ChatGPT
     await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
+    print("🧭 Переход в try-блок...")
         
     try:
         print("📨 USER:", user_text)
@@ -304,7 +305,10 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
 
 # Обработка всех текстовых сообщений, кроме команд
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await chatgpt_response(update, context)
+    try:
+        await chatgpt_response(update, context)
+    except Exception as e:
+        print("‼️ Ошибка вне chatgpt_response:", str(e))
 
 # Запуск приложения
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
