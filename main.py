@@ -270,12 +270,12 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
                     {"role": "system", "content": "Ты — голос Элайи..."},
                     {"role": "user", "content": user_text},
                 ]
-        ),
-        timeout=20
-    )
-    gpt_reply = response.choices[0].message.content.strip()
-    print("📩 Ответ ЭлаЙа:", gpt_reply)
-    await update.message.reply_text(gpt_reply)
+            ),
+            timeout=20
+        )
+        gpt_reply = response.choices[0].message.content.strip()
+        print("📩 Ответ ЭлаЙа:", gpt_reply)
+        await update.message.reply_text(gpt_reply)
             
     except asyncio.TimeoutError:
         await update.message.reply_text(
