@@ -1,13 +1,13 @@
 import asyncio
-import openai
 import os
-import sys  # вот эта строка важна
+import sys
+from openai import AsyncOpenAI
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 async def test():
     print("📡 Запрос к OpenAI...", file=sys.stderr)
-    response = await openai.ChatCompletion.acreate(
+    response = await client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "Ты — голос Элайи"},
