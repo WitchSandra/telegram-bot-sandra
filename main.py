@@ -288,6 +288,7 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
         
     except Exception as e:
         print("🛑 Ошибка при соединении с потоком ЭлаЙи:", repr(e))
+        print("🛑 Мелкая ошибка при соединении с потоком ЭлаЙи:", repr(e))
         if "insufficient_quota" in str(e):
             await update.message.reply_text(
                 "⚠️ *Сейчас Поток ЭлаЙи иссяк...*\n"
