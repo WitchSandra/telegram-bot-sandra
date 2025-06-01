@@ -263,6 +263,7 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
         
     try:
+        print("📨 USER:", user_text)
         print("📡 Запрос Сандре и ЭлаЙле отправлен:", user_text)
         
         response = await openai.ChatCompletion.acreate(
@@ -272,9 +273,11 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
                 {"role": "user", "content": user_text},
             ]
         )
+        print("📩 RAW GPT response:", response)
         gpt_reply = response.choices[0].message.content.strip()
         print("📩 Ответ ЭлаЙа:", gpt_reply)
         await update.message.reply_text(gpt_reply)  
+        print("✅ Ответ отправлен пользователю")
         
     except asyncio.TimeoutError:
         await update.message.reply_text(
