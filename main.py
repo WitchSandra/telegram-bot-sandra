@@ -263,20 +263,17 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     try:
         print("📡 Запрос Сандре и ЭлаЙле отправлен:", user_text)
         
-        response = await asyncio.wait_for(
-            client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "Ты — голос Элайи..."},
-                    {"role": "user", "content": user_text},
-                ]
-            ),
-            timeout=20
+        response = await openai.ChatCompletion.acreate(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Ты — голос Элайи..."},
+                {"role": "user", "content": user_text},
+            ]
         )
         gpt_reply = response.choices[0].message.content.strip()
         print("📩 Ответ ЭлаЙа:", gpt_reply)
-        await update.message.reply_text(gpt_reply)
-            
+        await update.message.reply_text(gpt_reply)  
+        
     except asyncio.TimeoutError:
         await update.message.reply_text(
             "⚠️ Ошибка при обращении к источнику данных ЭлаЙа\\. Попробуй позже\\.",
