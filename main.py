@@ -320,7 +320,7 @@ async def main():
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
 
     print("Бот запущен как Сандра и ЭлаЙа 🌙")
-    await app.run_polling()
+    await app.run_polling(allowed_updates=[])
 
 # 🚀 Запуск main() через asyncio
 # 🚀 Запуск main() для Railway/Streamlit-сред с уже запущенным event loop
