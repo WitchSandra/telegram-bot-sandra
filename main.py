@@ -280,9 +280,10 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
 
 # Обращение к ChatGPT от лица ЭлаЙа
     for keyword, command in keyword_mapping.items():
-        if keyword in user_text:
-            await generic_response_command(update, context, command)
-            return
+    keywords = [k.strip().lower() for k in keyword.split(",")]
+    if any(k in user_text.lower() for k in keywords):
+        await generic_response_command(update, context, command)
+        return
 
  # Если ключевое слово не найдено — обычный запрос к ChatGPT
     await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
