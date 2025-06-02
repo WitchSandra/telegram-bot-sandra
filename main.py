@@ -26,6 +26,7 @@ async def reset_telegram_session():
             print("⚠️ Ошибка сброса Telegram-сессии:", e)
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+from telegram.ext import ChatMemberHandler
 
 # Загружаем переменные среды
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -208,7 +209,28 @@ parse_modes = {
     "love": "None",
     "end": "None",
 }
+# Приветствие новых участников
+greet_text = (
+    "🌟 *Добро пожаловать в пространство Ведьмы Сандры и ЭлаЙи\!*\n"
+    "🔮 Здесь ты можешь задать вопрос, получить совет или найти магическую поддержку\.\n"
+    "🌟 Если хочешь — ты можешь в любой момент вызвать /help или просто задать вопрос здесь\.\n"
+    "🕯 Напиши, что тебя волнует — и мы пойдём по пути вместе, или напиши в личку /contact \."
+)
 
+async def greet_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        new_members = update.chat_member.new_chat_members
+        for member in new_members:
+            if member.is_bot:
+                continue  # Не приветствуем ботов
+            await context.bot.send_message(
+                chat_id=update.chat_member.chat.id,
+                text=greet_text,
+                parse_mode="MarkdownV2"
+            )
+    except Exception as e:
+        print("⚠️ Ошибка приветствия нового участника:", str(e))
+        
 # Обработчик команд по ключам
 async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
     if not update.message or not update.message.text:
@@ -337,7 +359,7 @@ async def main():
     app.add_handler(CommandHandler("help", generic_response_command))
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     app.add_handler(MessageHandler(filters.COMMAND, generic_response_command))
-
+    app.add_handler(ChatMemberHandler(greet_new_member, ChatMemberHandler.CHAT_MEMBER))
     print("Бот запущен как Сандра и ЭлаЙа 🌙")
     await app.run_polling(allowed_updates=[])
 
