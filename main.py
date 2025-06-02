@@ -221,13 +221,16 @@ async def greet_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         new_members = update.chat_member.new_chat_members
         for member in new_members:
-            if member.is_bot:
-                continue  # Не приветствуем ботов
-            await context.bot.send_message(
-                chat_id=update.chat_member.chat.id,
-                text=greet_text,
-                parse_mode="MarkdownV2"
-            )
+            if update.chat_member.old_chat_member.status in ["left", "kicked"] and \
+               update.chat_member.new_chat_member.status == "member" and \
+               not member.is_bot and member.username is not None:
+
+                print(f"👤 Настоящий участник: {member.full_name} ({member.username})")
+                await context.bot.send_message(
+                    chat_id=update.chat_member.chat.id,
+                    text=greet_text,
+                    parse_mode="MarkdownV2"
+                )
     except Exception as e:
         print("⚠️ Ошибка приветствия нового участника:", str(e))
         
