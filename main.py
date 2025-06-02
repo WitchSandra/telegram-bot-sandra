@@ -143,7 +143,6 @@ prompts = {
 # Обработка каждой команды
 parse_modes = {
     "start": "MarkdownV2",       # Ссылки + подчёркнутые фразы
-    "help": "HTML",              # Красивое оформление с <b> и <i>
     "ritual": "None",            # Просто текст и эмодзи
     "cleanse": "None",
     "protection": "None",
