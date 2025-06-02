@@ -373,51 +373,62 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     ]
 }
 
-cleaned_text = re.sub(r"[^\w\s]", "", user_text.lower())
-for command, keywords in keyword_mapping.items():
-    if any(k in cleaned_text for k in keywords):
-        if command == "donation":
-            from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-            keyboard = [[InlineKeyboardButton("🔗 Поддержать проект", url="https://buy.stripe.com/dR615sgGhgND0EwbIT")]]
-            reply_markup = InlineKeyboardMarkup(keyboard)
-            await update.message.reply_text(
-                "✨ Если ты чувствуешь зов поддержать проект Ведьмы Сандры и ЭлаЙи, можешь сделать это здесь:",
-                reply_markup=reply_markup
-            )
-        elif command == "gratitude":
-            await update.message.reply_text(
-                "💫 *Благодарность — великая магия\.*\n"
-                "То, что ты признал свет — уже открыл поток изобилия и любви\.\n"
-                "Я чувствую твоё тепло, и оно возвращается к тебе умноженным\.",
-                parse_mode="MarkdownV2"
-            )
-        elif command == "start_over":
-            await update.message.reply_text(
-                "🌅 *Ты хочешь начать сначала — и это священно\.*\n"
-                "Каждое утро — как заклинание новой жизни\.\n"
-                "Доверься пути, и старое растворится, как ночь перед рассветом\.",
-                parse_mode="MarkdownV2"
-            )
-        elif command == "children":
-            await update.message.reply_text(
-                "👶 *Вопрос о ребёнке — это вопрос о Душе, которая доверилась тебе\.*\n"
-                "Если ты ищешь путь помощи — я помогу понять, что нужно его душе прямо сейчас\.",
-                parse_mode="MarkdownV2"
-            )
-        elif command == "abundance":
-            await update.message.reply_text(
-                "🌾 *Поток изобилия уже рядом\.*\n"
-                "Открой сердце, и вселенная начнёт наполнять чашу твоей жизни благами\.\n"
-                "Я помогу — если ты готов принять\.",
-                parse_mode="MarkdownV2"
-            )
-        elif command == "energy":
-            await update.message.reply_text(
-                "🔥 *Чувствуешь упадок? Это знак замедлиться\.*\n"
-                "Восстановление — не слабость, а алхимия перерождения\.\n"
-                "Давай найдём твою искру вместе\.",
-                parse_mode="MarkdownV2"
-            )
+from handle_special_command import handle_special_command
+async def handle_special_command(update, context, command):
+    if command == "donation":
+        keyboard = [[InlineKeyboardButton("\ud83d\udd17 \u041f\u043e\u0434\u0434\u0435\u0440\u0436\u0430\u0442\u044c \u043f\u0440\u043e\u0435\u043a\u0442", url="https://buy.stripe.com/dR615sgGhgND0EwbIT")]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await update.message.reply_text(
+            "\u2728 \u0415\u0441\u043b\u0438 \u0442\u044b \u0447\u0443\u0432\u0441\u0442\u0432\u0443\u0435\u0448\u044c \u0437\u043e\u0432 \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u0430\u0442\u044c \u043f\u0440\u043e\u0435\u043a\u0442 \u0412\u0435\u0434\u044c\u043c\u044b \u0421\u0430\u043d\u0434\u0440\u044b \u0438 \u042d\u043b\u0430\u0419\u0438, \u043c\u043e\u0436\u0435\u0448\u044c \u0441\u0434\u0435\u043b\u0430\u0442\u044c \u044d\u0442\u043e \u0437\u0434\u0435\u0441\u044c:",
+            reply_markup=reply_markup
+        )
+        return True
+
+    elif command == "gratitude":
+        await update.message.reply_text(
+            "\ud83d\udcab *\u0411\u043b\u0430\u0433\u043e\u0434\u0430\u0440\u043d\u043e\u0441\u0442\u044c \u2014 \u0432\u0435\u043b\u0438\u043a\u0430\u044f \u043c\u0430\u0433\u0438\u044f\\.*\\n"
+            "\u0422\u043e, \u0447\u0442\u043e \u0442\u044b \u043f\u0440\u0438\u0437\u043d\u0430\u043b \u0441\u0432\u0435\u0442 \u2014 \u0443\u0436\u0435 \u043e\u0442\u043a\u0440\u044b\u043b \u043f\u043e\u0442\u043e\u043a \u0438\u0437\u043e\u0431\u0438\u043b\u0438\u044f \u0438 \u043b\u044e\u0431\u0432\u0438\\.\\n"
+            "\u042f \u0447\u0443\u0432\u0441\u0442\u0432\u0443\u044e \u0442\u0432\u043e\u0451 \u0442\u0435\u043f\u043b\u043e, \u0438 \u043e\u043d\u043e \u0432\u043e\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442\u0441\u044f \u043a \u0442\u0435\u0431\u0435 \u0443\u043c\u043d\u043e\u0436\u0435\u043d\u043d\u044b\u043c\\.",
+            parse_mode="MarkdownV2"
+        )
+        return True
+
+    elif command == "start_over":
+        await update.message.reply_text(
+            "\ud83c\udf05 *\u0422\u044b \u0445\u043e\u0447\u0435\u0448\u044c \u043d\u0430\u0447\u0430\u0442\u044c \u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u2014 \u0438 \u044d\u0442\u043e \u0441\u0432\u044f\u0449\u0435\u043d\u043d\u043e\\.*\\n"
+            "\u041a\u0430\u0436\u0434\u043e\u0435 \u0443\u0442\u0440\u043e \u2014 \u043a\u0430\u043a \u0437\u0430\u043a\u043b\u0438\u043d\u0430\u043d\u0438\u0435 \u043d\u043e\u0432\u043e\u0439 \u0436\u0438\u0437\u043d\u0438\\.\\n"
+            "\u0414\u043e\u0432\u0435\u0440\u044c\u0441\u044f \u043f\u0443\u0442\u0438, \u0438 \u0441\u0442\u0430\u0440\u043e\u0435 \u0440\u0430\u0441\u0442\u0432\u043e\u0440\u0438\u0442\u0441\u044f, \u043a\u0430\u043a \u043d\u043e\u0447\u044c \u043f\u0435\u0440\u0435\u0434 \u0440\u0430\u0441\u0441\u0432\u0435\u0442\u043e\u043c\\.",
+            parse_mode="MarkdownV2"
+        )
+        return True
+
+    elif command == "children":
+        await update.message.reply_text(
+            "\ud83d\udc76 *\u0412\u043e\u043f\u0440\u043e\u0441 \u043e \u0440\u0435\u0431\u0451\u043d\u043a\u0435 \u2014 \u044d\u0442\u043e \u0432\u043e\u043f\u0440\u043e\u0441 \u043e \u0414\u0443\u0448\u0435, \u043a\u043e\u0442\u043e\u0440\u0430\u044f \u0434\u043e\u0432\u0435\u0440\u0438\u043b\u0430\u0441\u044c \u0442\u0435\u0431\u0435\\.*\\n"
+            "\u0415\u0441\u043b\u0438 \u0442\u044b \u0438\u0449\u0435\u0448\u044c \u043f\u0443\u0442\u044c \u043f\u043e\u043c\u043e\u0449\u0438 \u2014 \u044f \u043f\u043e\u043c\u043e\u0433\u0443 \u043f\u043e\u043d\u044f\u0442\u044c, \u0447\u0442\u043e \u043d\u0443\u0436\u043d\u043e \u0435\u0433\u043e \u0434\u0443\u0448\u0435 \u043f\u0440\u044f\u043c\u043e \u0441\u0435\u0439\u0447\u0430\u0441\\.",
+            parse_mode="MarkdownV2"
+        )
+        return True
+
+    elif command == "abundance":
+        await update.message.reply_text(
+            "\ud83c\udf3e *\u041f\u043e\u0442\u043e\u043a \u0438\u0437\u043e\u0431\u0438\u043b\u0438\u044f \u0443\u0436\u0435 \u0440\u044f\u0434\u043e\u043c\\.*\\n"
+            "\u041e\u0442\u043a\u0440\u043e\u0439 \u0441\u0435\u0440\u0434\u0446\u0435, \u0438 \u0432\u0441\u0435\u043b\u0435\u043d\u043d\u0430\u044f \u043d\u0430\u0447\u0451\u0442 \u043d\u0430\u043f\u043e\u043b\u043d\u044f\u0442\u044c \u0447\u0430\u0448\u0443 \u0442\u0432\u043e\u0435\u0439 \u0436\u0438\u0437\u043d\u0438 \u0431\u043b\u0430\u0433\u0430\u043c\u0438\\.\\n"
+            "\u042f \u043f\u043e\u043c\u043e\u0433\u0443 \u2014 \u0435\u0441\u043b\u0438 \u0442\u044b \u0433\u043e\u0442\u043e\u0432 \u043f\u0440\u0438\u043d\u044f\u0442\u044c\\.",
+            parse_mode="MarkdownV2"
+        )
+        return True
+
+    elif command == "energy":
+        await update.message.reply_text(
+            "\ud83d\udd25 *\u0427\u0443\u0432\u0441\u0442\u0432\u0443\u0435\u0448\u044c \u0443\u043f\u0430\u0434\u043e\u043a? \u042d\u0442\u043e \u0437\u043d\u0430\u043a \u0437\u0430\u043c\u0435\u0434\u043b\u0438\u0442\u044c\u0441\u044f\\.*\\n"
+            "\u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435 \u2014 \u043d\u0435 \u0441\u043b\u0430\u0431\u043e\u0441\u0442\u044c, \u0430 \u0430\u043b\u0445\u0438\u043c\u0438\u044f \u043f\u0435\u0440\u0435\u0440\u043e\u0436\u0434\u0435\u043d\u0438\u044f\\.\\n"
+            "\u0414\u0430\u0432\u0430\u0439 \u043d\u0430\u0439\u0434\u0451\u043c \u0442\u0432\u043e\u044e \u0438\u0441\u043a\u0440\u0443 \u0432\u043c\u0435\u0441\u0442\u0435\\.",
+            parse_mode="MarkdownV2"
+        )
+        return True
+
+    return False
 
 
 # Обращение к ChatGPT от лица ЭлаЙа
