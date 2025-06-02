@@ -428,6 +428,19 @@ async def handle_special_command(update, context, command):
         )
         return True
 
+    elif command == "help":
+        keyboard = [[InlineKeyboardButton("🔗 Поддержать проект", url="https://buy.stripe.com/dR615sgGhgND0EwbIT")]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await update.message.reply_text(
+            "📜 Вот чем я могу быть полезна\\:\n"
+            "\\- Задай вопрос о *любви*, *здоровье*, *прошлой жизни*, *родовых программах*\\.\n"
+            "\\- Напиши ключевое слово: *таро*, *руны*, *очищение*, *дети*, *изобилие*\\.\n"
+            "\\- Хочешь поддержать меня — нажми кнопку ниже\\!",
+            reply_markup=reply_markup,
+            parse_mode="MarkdownV2"
+        )
+        return True
+        
     return False
 
 
