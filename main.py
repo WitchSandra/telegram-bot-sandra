@@ -31,6 +31,8 @@ from telegram.ext import ChatMemberHandler
 # Загружаем переменные среды
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+# Глобальная переменная для отслеживания режима GPT
+user_gpt_mode = {}
 
 # Приветствие новых участников
 greet_text = (
@@ -59,7 +61,12 @@ async def greet_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
 # Обработчик команд по ключам
 async def generic_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE, command: str = None):
-    if not update.message or not update.message.text:
+    user_id = update.effective_user.id
+    if user_gpt_mode.get(user_id):
+        await update.message.reply_text(
+            "🤖 Сейчас ты в режиме диалога с Сандра & ЭлаЙа\\. Напиши /exit, чтобы вернуться к использованию команд\\.",
+            parse_mode="MarkdownV2"
+        )
         return
 
     if command is None:
@@ -217,6 +224,16 @@ from handle_special_command import handle_special_command
     }
     if command in aliases:
         command = aliases[command]
+
+async def exit_gpt_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    user_gpt_mode[user_id] = False
+    await update.message.reply_text(
+        "🧘‍♀️ Ты вышел из режима глубокого диалога с Сандра & ЭлаЙа\\.\n"
+        "Теперь ты снова можешь использовать команды\\.\n"
+        "Напиши /help, чтобы увидеть список доступных возможностей\\.",
+        parse_mode="MarkdownV2"
+    )
 
 async def handle_special_command(update, context, command):
     if command == "donation":
@@ -686,11 +703,13 @@ async def handle_special_command(update, context, command):
         
 # Обработка всех текстовых сообщений, кроме команд
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    user_gpt_mode[user_id] = True  # Активируем GPT-режим для пользователя
     try:
         await chatgpt_response(update, context)
     except Exception as e:
         print("‼️ Ошибка вне chatgpt_response:", str(e))
-
+        
 # Запуск приложения
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await generic_response_command(update, context, command="start")
@@ -706,6 +725,7 @@ async def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", generic_response_command))
     app.add_handler(CommandHandler("contact", generic_response_command))
+    app.add_handler(CommandHandler("exit", exit_gpt_mode))
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     app.add_handler(MessageHandler(filters.COMMAND, generic_response_command))
     app.add_handler(ChatMemberHandler(greet_new_member, ChatMemberHandler.CHAT_MEMBER))
