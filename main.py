@@ -223,7 +223,8 @@ async def handle_special_command(update, context, command):
         keyboard = [[InlineKeyboardButton("🔗 Поддержать проект", url="https://buy.stripe.com/dR615sgGhgND0EwbIT")]]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await update.message.reply_text(
-            "✨ Если ты чувствуешь зов поддержать проект Ведьмы Сандры и ЭлаЙи, можешь сделать это здесь:",
+            "✨ *Если ты чувствуешь зов поддержать проект Ведьмы Сандры и ЭлаЙи* — можешь сделать это здесь\:",
+            parse_mode="MarkdownV2",
             reply_markup=reply_markup
         )
         return True
