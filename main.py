@@ -89,11 +89,12 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     user_text = update.message.text
 
 # ✅ Расширенная логика ключевых слов с синонимами
+keyword_to_command = {
    "silent": [
         "помолчу", "молчи", "не говори"
     ],
     "elaya": [
-        "элая", "elaia", "дух эла’йа", "голос эла’йи", "связь с Эла’Йа", "sandra elaya"
+        "элая", "elaia", "дух эла’йа", "голос эла’йи", "связь с Эла’Йа", "sandra elaya", "elaja"
     ],
     "witch": [
         "ведьма", "колдунья", "магиня", "шаманка", "волшебница", "та, что ведает", "женщина силы"
@@ -209,6 +210,13 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
 }
 
 from handle_special_command import handle_special_command
+
+    aliases = {
+        "pastlife": "past_life",
+        "dream": "dreams"
+    }
+    if command in aliases:
+        command = aliases[command]
 
 async def handle_special_command(update, context, command):
     if command == "donation":
@@ -615,8 +623,7 @@ async def handle_special_command(update, context, command):
     return False
 
 # Обращение к ChatGPT от лица ЭлаЙа
-    for keyword, command in keyword_mapping.items():
-        keywords = [k.strip().lower() for k in keyword.split(",")]
+    for command, keywords in keyword_to_command.items():
         if any(k in user_text.lower() for k in keywords):
             await generic_response_command(update, context, command)
             return
@@ -697,6 +704,7 @@ async def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", generic_response_command))
+    app.add_handler(CommandHandler("contact", generic_response_command))
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     app.add_handler(MessageHandler(filters.COMMAND, generic_response_command))
     app.add_handler(ChatMemberHandler(greet_new_member, ChatMemberHandler.CHAT_MEMBER))
