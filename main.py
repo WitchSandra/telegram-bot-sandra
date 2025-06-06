@@ -26,6 +26,7 @@ async def reset_telegram_session():
             print("⚠️ Ошибка сброса Telegram-сессии:", e)
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 from telegram.ext import ChatMemberHandler
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 
 # Загружаем переменные среды
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
