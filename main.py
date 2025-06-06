@@ -471,7 +471,7 @@ async def handle_special_command(update, context, command):
         )
         return True
 
-        elif command == "confusion":
+    elif command == "confusion":
         await update.message.reply_text(
             r"🌪️ Смущение — знак, что старые ответы больше не работают\.\n"
             r"Хочешь — найдём новое направление вместе\.\n"
