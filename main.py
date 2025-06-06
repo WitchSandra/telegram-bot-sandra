@@ -24,7 +24,6 @@ async def reset_telegram_session():
 
         except Exception as e:
             print("⚠️ Ошибка сброса Telegram-сессии:", e)
-from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 from telegram.ext import ChatMemberHandler
 
