@@ -223,8 +223,6 @@ keyword_to_command = {
     ]
 }
 
-from handle_special_command import handle_special_command
-
 aliases = {
     "pastlife": "past_life",
     "dream": "dreams"
