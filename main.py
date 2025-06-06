@@ -351,7 +351,7 @@ async def handle_special_command(update, context, command):
             r"🕊️ Бог — это не образ, а вибрация, с которой ты соединяешься\.\n"
             r"Какую форму бы он ни принял, ты чувствуешь Его внутри\.",
             parse_mode="MarkdownV2",
-            reply_markup=reply_markup"
+            reply_markup=reply_markup
         )
         return True
 
