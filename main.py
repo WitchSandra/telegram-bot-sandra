@@ -671,7 +671,7 @@ async def handle_special_command(update, context, command):
         )
         return True
 
-        elif command == "cleanse":
+    elif command == "cleanse":
         await update.message.reply_text(
             r"💧 Очищение — это обряд освобождения от старого\.\n"
             r"Вода, слово или дыхание могут стать началом новой главы\.",            
