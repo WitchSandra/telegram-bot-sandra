@@ -223,13 +223,6 @@ keyword_to_command = {
     ]
 }
 
-aliases = {
-    "pastlife": "past_life",
-    "dream": "dreams"
-}
-if command in aliases:
-    command = aliases[command]
-
 async def exit_gpt_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_gpt_mode[user_id] = False
