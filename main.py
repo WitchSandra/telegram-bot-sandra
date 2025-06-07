@@ -800,6 +800,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # 🔁 Основной запуск бота через асинхронную функцию main()
 async def main():
+    if os.getenv("TELEGRAM_MAX_INSTANCES") != "1":
+        print("⚠️ Запуск остановлен: TELEGRAM_MAX_INSTANCES ≠ 1")
+        return
+        
     await reset_telegram_session()
 
     print("BOT_TOKEN:", repr(BOT_TOKEN))
