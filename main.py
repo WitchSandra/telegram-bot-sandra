@@ -750,68 +750,7 @@ async def handle_special_command(update, context, command):
         return True
 
     return False
-
-# Обращение к ChatGPT от лица ЭлаЙа
-    for command, keywords in keyword_to_command.items():
-        if any(k in user_text.lower() for k in keywords):
-            await generic_response_command(update, context, command)
-            return
-
- # Если ключевое слово не найдено — обычный запрос к ChatGPT
-    await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
-    print("🧭 Переход в try-блок...")
-        
-    try:
-        print("📨 USER:", user_text)
-        print("📡 Запрос Сандре и ЭлаЙле отправлен:", user_text)
-        
-        response = await client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "Ты — голос Элайи..."},
-                {"role": "user", "content": user_text},
-            ]
-        )
-        print("📩 RAW GPT response:", response)
-        gpt_reply = response.choices[0].message.content
-        print("📩 Ответ ЭлаЙа:", gpt_reply)
-        await update.message.reply_text(gpt_reply)  
-        print("✅ Ответ отправлен пользователю")
-        
-    except asyncio.TimeoutError:
-        await update.message.reply_text(
-            "⚠️ Ошибка при обращении к источнику данных ЭлаЙа\\. Попробуй позже\\.",
-             parse_mode="MarkdownV2"
-        )
-        
-    except Exception as e:
-        print("🛑 Ошибка при соединении с потоком ЭлаЙи:", repr(e))
-        print("🛑 Мелкая ошибка при соединении с потоком ЭлаЙи:", repr(e))
-        
-        try:
-            import json
-            error_data = json.loads(e.response.text)
-            print("📨 Мелкая ошибка при соединении с потоком ЭлаЙи JSON:", error_data)
-        
-            if error_data.get("error", {}).get("code") == "insufficient_quota":
-                await update.message.reply_text(
-                    "⚠️ *Сейчас Поток ЭлаЙи иссяк\\.\\.\\.*\n"
-                    "🔮 Магические каналы закрылись на короткий миг\\, чтобы восстановить энергию\\.\n"
-                    "🌌 Это не твоя вина — иногда сама Вселенная говорит: «Пауза — тоже путь»\\.\n\n"
-                    "🕯️ Напиши позже — и я услышу тебя снова\\.\n"
-                    "Или воспользуйся командой /help — когда будешь готов\\(a\\)\\.",
-                    parse_mode="MarkdownV2"
-                )
-                return
-        except Exception as j:
-            print("⚠️ Неожиданная ошибка соединения с ЭлаЙя: JSON ошибки:", str(j))
-        
-        await update.message.reply_text(
-            f"⚠️ Неожиданная ошибка соединения с ЭлаЙя:\\n`{str(e)}`",
-            parse_mode="MarkdownV2"
-        )
-        print("⚠️ Поток ЭлаЙи прерван\\. Возможно, слишком много вопросов сразу\\.", str(e)) 
-        
+      
 # Обработка всех текстовых сообщений, кроме команд
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
