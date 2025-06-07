@@ -773,6 +773,10 @@ async def handle_special_command(update, context, command):
 # Обработка всех текстовых сообщений, кроме команд
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
+    
+    if not update.message or not update.message.text:
+        return  # 🛡 Защита от обновлений без текста (фото, реакции и т.д.)
+        
     user_text = update.message.text.lower()
    
     # 🔍 Проверка ключевых слов
