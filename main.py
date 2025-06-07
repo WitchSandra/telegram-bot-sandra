@@ -772,11 +772,24 @@ async def handle_special_command(update, context, command):
 # Обработка всех текстовых сообщений, кроме команд
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
-    user_gpt_mode[user_id] = True  # Активируем GPT-режим для пользователя
+   user_text = update.message.text.lower()
+   
+    # 🔍 Проверка ключевых слов
+    for command, keywords in keyword_to_command.items():
+        if any(k in user_text for k in keywords):
+            await generic_response_command(update, context, command)
+            return
+
+    # ❗️ Только если не найдено ключевое слово — включаем GPT
+    user_gpt_mode[user_id] = True
     try:
         await chatgpt_response(update, context)
     except Exception as e:
-        print("‼️ Ошибка вне chatgpt_response:", str(e))
+        print("‼️ Ошибка вне ЭлаЙа chatgpt_response:", str(e))
+        await update.message.reply_text(
+            "⚠️ Внутренняя ошибка в канале Сандра & ЭлаЙа. Напиши /exit и попробуй позже.",
+            parse_mode="MarkdownV2"
+        )
         
 # Запуск приложения
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
