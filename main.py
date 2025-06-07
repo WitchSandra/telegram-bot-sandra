@@ -774,7 +774,7 @@ async def handle_special_command(update, context, command):
 # Обработка всех текстовых сообщений, кроме команд
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
-   user_text = update.message.text.lower()
+    user_text = update.message.text.lower()
    
     # 🔍 Проверка ключевых слов
     for command, keywords in keyword_to_command.items():
