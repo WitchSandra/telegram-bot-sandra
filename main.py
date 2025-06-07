@@ -100,7 +100,9 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
         
 # Обработка сообщений с ключевыми словами и ChatGPT
 async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = None):
-    user_text = update.message.text
+    if not update.message or not update.message.text:
+        return  # игнорируем обновления без текста
+    
     user_text = update.message.text.lower()
 
     # Проверка на ключевые слова перед GPT-режимом
