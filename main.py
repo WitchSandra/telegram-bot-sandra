@@ -223,6 +223,34 @@ keyword_to_command = {
     ]
 }
 
+    for command, keywords in keyword_to_command.items():
+        if any(k in user_text.lower() for k in keywords):
+            await generic_response_command(update, context, command)
+            return
+
+    await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
+
+    try:
+        print("📨 USER:", user_text)
+        print("📡 Запрос Сандре и ЭлаЙле отправлен:", user_text)
+
+        response = await client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Ты — голос Элайи. Отвечай магично, образно, поэтично и мудро."},
+                {"role": "user", "content": user_text},
+            ]
+        )
+        gpt_reply = response.choices[0].message.content
+        await update.message.reply_text(gpt_reply)
+
+    except Exception as e:
+        print("🛑 Ошибка GPT:", str(e))
+        await update.message.reply_text(
+            f"⚠️ Ошибка при соединении с источником ЭлаЙа:\n`{str(e)}`",
+            parse_mode="MarkdownV2"
+        )
+
 async def exit_gpt_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_gpt_mode[user_id] = False
