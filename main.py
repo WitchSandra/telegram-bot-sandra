@@ -96,6 +96,15 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
     else:
         await chatgpt_response(update, context)
         
+# 🔎 Обработка ключевых слов через keyword_to_command
+async def handle_keyword_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_text = update.message.text.lower()
+    for command, keywords in keyword_to_command.items():
+        if any(k in user_text for k in keywords):
+            await generic_response_command(update, context, command)
+            return True
+    return False
+
 # Обработка сообщений с ключевыми словами и ChatGPT
 async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = None):
     if not update.message or not update.message.text:
@@ -240,26 +249,38 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
         ]
     }
 
-    for command, keywords in keyword_to_command.items():
-        if any(k in user_text.lower() for k in keywords):
-            await generic_response_command(update, context, command)
-            return  
-    
-    await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
+async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = None):
+    if not update.message or not update.message.text:
+        return
+
+    user_text = update.message.text.lower()
+    user_id = update.effective_user.id
 
     try:
-        print("📨 USER:", user_text)
-        print("📡 Запрос Сандре и ЭлаЙле отправлен:", user_text)
+        # 🔍 Сначала пробуем ключевые слова
+        if await handle_keyword_command(update, context):
+            return
+
+        # 🤖 Если нет — включаем GPT
+        user_gpt_mode[user_id] = True
+        await update.message.reply_text("❤️ Подожди — Думаю над ответом...")
 
         response = await client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Ты — голос Элайи. Отвечай магично, образно, поэтично и мудро."},
+                {"role": "system", "content": "Ты — голос ЭлаЙа. Отвечай магично, образно, поэтично и мудро."},
                 {"role": "user", "content": user_text},
             ]
         )
         gpt_reply = response.choices[0].message.content
         await update.message.reply_text(gpt_reply)
+
+    except Exception as e:
+        print("‼️ Ошибка в chatgpt_response:", str(e))
+        await update.message.reply_text(
+            "⚠️ Внутренняя ошибка. Напиши /exit и попробуй позже.",
+            parse_mode="MarkdownV2"
+        )
 
     except Exception as e:
         print("🛑 Ошибка GPT:", str(e))
