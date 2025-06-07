@@ -112,7 +112,6 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
             return
 
     # Ключей нет — активируем GPT-режим
-    user_gpt_mode[user_id] = True
     try:
         await chatgpt_response(update, context)
     except Exception as e:
