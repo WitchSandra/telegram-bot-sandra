@@ -101,7 +101,25 @@ async def generic_response_command(update: Update, context: ContextTypes.DEFAULT
 # Обработка сообщений с ключевыми словами и ChatGPT
 async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = None):
     user_text = update.message.text
+    user_text = update.message.text.lower()
 
+    # Проверка на ключевые слова перед GPT-режимом
+    for command, keywords in keyword_to_command.items():
+        if any(k in user_text for k in keywords):
+            await generic_response_command(update, context, command)
+            return
+
+    # Ключей нет — активируем GPT-режим
+    user_gpt_mode[user_id] = True
+    try:
+        await chatgpt_response(update, context)
+    except Exception as e:
+        print("‼️ Ошибка вне chatgpt_response:", str(e))
+        await update.message.reply_text(
+            "⚠️ Внутренняя ошибка в канале ЭлаЙа. Напиши /exit и попробуй позже.",
+            parse_mode="MarkdownV2"
+        )
+    
 # ✅ Расширенная логика ключевых слов с синонимами
     keyword_to_command = {
        "silent": [
@@ -226,8 +244,8 @@ async def chatgpt_response(update: Update, context: ContextTypes.DEFAULT_TYPE = 
     for command, keywords in keyword_to_command.items():
         if any(k in user_text.lower() for k in keywords):
             await generic_response_command(update, context, command)
-            return
-
+            return  
+    
     await update.message.reply_text("❤️ Подожди - Думаю над ответом...")
 
     try:
